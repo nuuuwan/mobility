@@ -17,8 +17,8 @@ REGEX_FILE = r'movement-range-data-(?P<date_str>\d{4}-\d{2}-\d{2}).zip'
 
 
 @cache(CACHE_NAME, CACHE_TIMEOUT)
-def _get_download_url():
-    """Implement mobility."""
+def get_download_url():
+    """Get download URL."""
     options = Options()
     options.headless = True
     browser = webdriver.Firefox(options=options)
@@ -39,7 +39,8 @@ def _get_download_url():
 
 
 def scrape():
-    download_url = _get_download_url()
+    """Scrape data."""
+    download_url = get_download_url()
     zip_file = os.path.split(download_url)[-1]
     re_result = re.match(REGEX_FILE, zip_file)
     if re_result:
