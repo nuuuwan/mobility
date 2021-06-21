@@ -2,4 +2,4 @@
 
 import logging
 logging.basicConfig(level=logging.INFO)
-log = logging.getLogger('{repo_name}')
+log = logging.getLogger('mobility')

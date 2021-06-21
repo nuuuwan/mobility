@@ -1,9 +1,7 @@
 """Uploaded data  to data branch."""
 
-def upload_data():
-    """Upload data."""
-    pass
+from mobility import scrape
 
 
 if __name__ == '__main__':
-    upload_data()
+    scrape.scrape()
