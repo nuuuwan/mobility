@@ -3,3 +3,4 @@ selenium
 tweepy
 utils-nuuuwan
 gig-nuuuwan
+geo-nuuuwan

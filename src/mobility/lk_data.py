@@ -14,7 +14,7 @@ URL_LK_DATA = os.path.join(
 
 
 @cache(CACHE_NAME, CACHE_TIMEOUT)
-def get_lk_data():
+def get_data():
     """Implement lk_data."""
     ds_to_dsd_to_info = www.read_json(URL_LK_DATA)
     return ds_to_dsd_to_info
@@ -23,7 +23,7 @@ def get_lk_data():
 @cache(CACHE_NAME, CACHE_TIMEOUT)
 def get_ds_list():
     """Get list of dates for which mobility data exists."""
-    return list(get_lk_data().keys())
+    return list(get_data().keys())
 
 
 @cache(CACHE_NAME, CACHE_TIMEOUT)
