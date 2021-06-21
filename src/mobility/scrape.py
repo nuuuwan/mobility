@@ -64,6 +64,7 @@ def scrape():
     log.info('Unzipped data')
 
     lk_text_file = '/tmp/mobility.lk-data-%s.txt' % (date_id)
+    latest_lk_text_file = '/tmp/mobility.lk-data-latest.txt'
     text_file = '%s/movement-range-%s.txt' % (tmp_dir, date_str)
     os.system('head -n 1 %s > %s' % (
         text_file,
@@ -73,7 +74,11 @@ def scrape():
         text_file,
         lk_text_file,
     ))
-    log.info('Extracted LK data to %s', lk_text_file)
+    os.system('cp %s %s' % (lk_text_file, latest_lk_text_file))
+    log.info('Extracted LK data to %s and %s', (
+        lk_text_file,.
+        latest_lk_text_file
+    ))
 
     os.system('rm -rf %s' % tmp_dir)
     log.info('Removed %s' % tmp_dir)
