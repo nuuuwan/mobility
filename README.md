@@ -24,3 +24,5 @@ pip install -i https://test.pypi.org/simple/ mobility-nuuuwan
 * Implemented scrape that pulls data from https://data.humdata.org/dataset/movement-range-maps
 
 ### WISHLIST
+* Add libs to pull LK data
+* Draw example graphs
