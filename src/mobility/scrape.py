@@ -110,6 +110,7 @@ def _expand_regions(ds_to_dsd_to_info):
     dsd_index = ents.get_entity_index('dsd')
     district_index = ents.get_entity_index('district')
     province_index = ents.get_entity_index('province')
+    country_index = ents.get_entity_index('country')
 
     def _expand_regions_in_ds(dsd_to_info):
         region_to_info = {}
@@ -124,6 +125,7 @@ def _expand_regions(ds_to_dsd_to_info):
             for region_id in [
                 dsd_ent['district_id'],
                 dsd_ent['province_id'],
+                'LK',
             ]:
                 if region_id not in region_to_immo_pop:
                     region_to_immo_pop[region_id] = 0
@@ -137,8 +139,10 @@ def _expand_regions(ds_to_dsd_to_info):
 
             if len(region_id) == 5:
                 region_ent = district_index[region_id]
-            else:
+            elif len(region_id) == 4:
                 region_ent = province_index[region_id]
+            else:
+                region_ent = country_index[region_id]
 
             region_pop = region_ent['population']
             coverage = data_pop / region_pop
