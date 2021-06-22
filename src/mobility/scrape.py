@@ -6,7 +6,7 @@ import re
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-from utils import timex, tsv, jsonx
+from utils import tsv, jsonx
 from utils.cache import cache
 
 from gig import ents
@@ -33,6 +33,7 @@ MISSING_DSD_NAME_TO_DSD_ID = {
         'Vadamaradchi South-West': 'LK-4121',
         'Vadamaradchy North': 'LK-4127',
 }
+DIR_TMP = '/tmp/tmp.mobility'
 
 
 @cache(CACHE_NAME, CACHE_TIMEOUT)
@@ -57,33 +58,41 @@ def get_download_url():
     return download_url
 
 
-def scrape():
-    """Scrape data."""
-    download_url = get_download_url()
-    zip_file = os.path.split(download_url)[-1]
-    re_result = re.match(REGEX_FILE, zip_file)
-    if re_result:
-        date_str = re_result.groupdict()['date_str']
-        unixtime = timex.parse_time(date_str, '%Y-%m-%d')
-        date_id = timex.format_time(unixtime, '%Y%m%d')
+def _get_date_str(download_url):
+    remote_zip_file = os.path.split(download_url)[-1]
+    re_result = re.match(REGEX_FILE, remote_zip_file)
+    if not re_result:
+        log.error('Invalid remote zip file: %s', remote_zip_file)
+        return None
+
+    date_str = re_result.groupdict()['date_str']
+    return date_str
     else:
-        log.error('Invalid zip file: %s', zip_file)
-        return
-    log.info('Downloading data for %s', date_str)
 
-    temp_dir = '/tmp/temp.mobility.%s' % (date_id)
-    os.system('wget -P %s %s' % (temp_dir, download_url))
-    log.info('Downloaded data from %s to %s', download_url, temp_dir)
 
-    log.info('Downloaded data to %s', zip_file)
-    os.system('unzip -d %s -o %s' % (
-        temp_dir,
-        os.path.join(temp_dir, zip_file)),
+
+def _download_zip(download_url):
+    zip_file = '/tmp/tmp.mobility.zip'
+    os.system('wget %s -O %s ' % (download_url, zip_file))
+    log.info(
+        'Downloaded zip from %s to %s',
+        download_url,
+        zip_file,
     )
-    log.info('Unzipped data')
+    return zip_file
 
-    lk_text_file = '%s/mobility.lk-data-%s.txt' % (temp_dir, date_id)
-    text_file = '%s/movement-range-%s.txt' % (temp_dir, date_str)
+
+def _unzip(zip_file):
+    os.system('unzip -d %s -o %s' % (
+        DIR_TMP,
+        zip_file,
+    ))
+    log.info('Unzipped %s to %s', zip_file, DIR_TMP)
+
+
+def _extract_lk_text(date_str):
+    text_file = '%s/movement-range-%s.txt' % (DIR_TMP, date_str)
+    lk_text_file = '%s/lk-data-%s.txt' % (DIR_TMP, date_str)
     os.system('head -n 1 %s > %s' % (
         text_file,
         lk_text_file,
@@ -92,14 +101,17 @@ def scrape():
         text_file,
         lk_text_file,
     ))
-    log.info('Extracted LK data to %s', (lk_text_file))
+    log.info('Extracted LK data from %s to %s', text_file, lk_text_file)
+    return lk_text_file
 
+
+def _extract_data(lk_text_file, date_str):
     data_list = tsv.read(lk_text_file)
-    dsd_name_to_dsd_id = {}
     ds_to_dsd_to_info = {}
 
-    for data in data_list:
-        dsd_name = data['polygon_name']
+    dsd_name_to_dsd_id = {}
+
+    def _get_dsd_id(dsd_name):
         if dsd_name not in dsd_name_to_dsd_id:
             if dsd_name in MISSING_DSD_NAME_TO_DSD_ID:
                 dsd_id = MISSING_DSD_NAME_TO_DSD_ID[dsd_name]
@@ -118,21 +130,36 @@ def scrape():
                     log.error('Could not find DSD for %s', dsd_name)
                     dsd_name_to_dsd_id[dsd_name] = None
 
-        dsd_id = dsd_name_to_dsd_id[dsd_name]
+        return dsd_name_to_dsd_id[dsd_name]
+
+    for data in data_list:
+        dsd_name = data['polygon_name']
+        dsd_id = _get_dsd_id(dsd_name)
         if not dsd_id:
             continue
-        ds = data['ds']
-        if ds not in ds_to_dsd_to_info:
-            ds_to_dsd_to_info[ds] = {}
 
-        # all_day_ratio_single_tile_users:
-        #   Positive proportion of users staying put within a single location
-        ds_to_dsd_to_info[ds][dsd_id] = \
+        _ds = data['ds']
+        if _ds not in ds_to_dsd_to_info:
+            ds_to_dsd_to_info[_ds] = {}
+
+        ds_to_dsd_to_info[_ds][dsd_id] = \
             (float)(data['all_day_ratio_single_tile_users'])
-    data_file_name = '/tmp/mobility.lk-data-%s.json' % (date_id)
+
+    data_file_name = '/tmp/mobility.lk-data-%s.json' % (date_str)
     jsonx.write(data_file_name, ds_to_dsd_to_info)
     log.info('Expanded LK data to %s', (data_file_name))
 
     latest_data_file_name = '/tmp/mobility.lk-data-%s.json' % ('latest')
     os.system('cp %s %s' % (data_file_name, latest_data_file_name))
     log.info('Copied LK data to %s', (latest_data_file_name))
+
+
+def scrape():
+    """Scrape data."""
+    download_url = get_download_url()
+    zip_file = _download_zip(download_url)
+    _unzip(zip_file)
+
+    date_str = _get_date_str(download_url)
+    lk_text_file = _extract_lk_text(date_str)
+    _extract_data(lk_text_file, date_str)
