@@ -120,8 +120,6 @@ def _expand_regions(ds_to_dsd_to_info):
 
             dsd_ent = dsd_index[dsd_id]
             dsd_pop = dsd_ent['population']
-            district_id = dsd_ent['district_id']
-            province_id = dsd_ent['province_id']
 
             for region_id in [
                 dsd_ent['district_id'],
@@ -151,7 +149,6 @@ def _expand_regions(ds_to_dsd_to_info):
         return region_to_info
 
     for _ds, dsd_to_info in ds_to_dsd_to_info.items():
-        log.info('Expanding regions for %s', _ds)
         dsd_to_region_to_info[_ds] = _expand_regions_in_ds(dsd_to_info)
     return dsd_to_region_to_info
 
