@@ -4,3 +4,4 @@ tweepy
 utils-nuuuwan
 gig-nuuuwan
 geo-nuuuwan
+imageio

@@ -34,7 +34,7 @@ MISSING_DSD_NAME_TO_DSD_ID = {
         'Vadamaradchy North': 'LK-4127',
 }
 DIR_TMP = '/tmp/tmp.mobility'
-COVERAGE_LIMIT = 0.5
+COVERAGE_LIMIT = 0.1
 
 
 @cache(CACHE_NAME, CACHE_TIMEOUT)

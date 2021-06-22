@@ -42,5 +42,8 @@ setuptools.setup(
         'selenium',
         'tweepy',
         'utils-nuuuwan',
+        'gig-nuuuwan',
+        'geo-nuuuwan',
+        'imageio',
     ],
 )
