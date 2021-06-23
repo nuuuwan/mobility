@@ -31,6 +31,7 @@ def get_latest_ds():
     """Get latest date for which mobility data exists."""
     return get_ds_list()[-1]
 
+
 @cache(CACHE_NAME, CACHE_TIMEOUT)
 def get_data_by_region():
     """Get data by region."""
