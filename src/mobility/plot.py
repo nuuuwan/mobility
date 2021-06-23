@@ -63,14 +63,13 @@ def _plot(region_id, child_region_type, label, _ds):
     plt.title('%% of %s "Staying Put" (%s)' % (label, _ds), fontsize=16)
     plt.savefig(image_file)
     plt.close()
-    os.system('open %s' % image_file)
     return image_file
 
 
 def _plot_all():
     ds_list = lk_data.get_ds_list()
     latest_ds = ds_list[-1]
-    week_ago_ds = ds_list[-1 - 8]
+    week_ago_ds = ds_list[-1 - 7]
     return {
         'ds': latest_ds,
         'image_files': [
