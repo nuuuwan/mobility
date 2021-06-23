@@ -5,3 +5,4 @@ utils-nuuuwan
 gig-nuuuwan
 geo-nuuuwan
 imageio
+matplotlib
