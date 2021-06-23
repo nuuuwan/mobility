@@ -1,4 +1,4 @@
-"""Implements plot."""
+"""Animated GIF."""
 import os
 import datetime
 
