@@ -45,5 +45,6 @@ setuptools.setup(
         'gig-nuuuwan',
         'geo-nuuuwan',
         'imageio',
+        'matplotlib',
     ],
 )
