@@ -146,7 +146,7 @@ def _build_animated_gif():
         if (i % 7 != 0) and (i != n_items - 1):
             continue
         _ds = item['ds']
-        img_file = '/tmp/mobility.%s.png' % (_ds)
+        img_file = '/tmp/tmp.mobility.%s.png' % (_ds)
         if not os.path.exists(img_file):
             img_file = _build_frame(data_all, _ds)
         img_files.append(img_file)

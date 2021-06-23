@@ -12,7 +12,7 @@ COVERAGE_LIMIT = 0.1
 
 
 def _expand_regions(ds_to_dsd_to_info):
-    dsd_to_region_to_info = {}
+    ds_to_region_to_info = {}
 
     dsd_index = ents.get_entity_index('dsd')
     district_index = ents.get_entity_index('district')
@@ -60,8 +60,8 @@ def _expand_regions(ds_to_dsd_to_info):
         return region_to_info
 
     for _ds, dsd_to_info in ds_to_dsd_to_info.items():
-        dsd_to_region_to_info[_ds] = _expand_regions_in_ds(dsd_to_info)
-    return dsd_to_region_to_info
+        ds_to_region_to_info[_ds] = _expand_regions_in_ds(dsd_to_info)
+    return ds_to_region_to_info
 
 
 def _extract_data(lk_text_file):
@@ -104,8 +104,10 @@ def _extract_data(lk_text_file):
         ds_to_dsd_to_info[_ds][dsd_id] = \
             (float)(data['all_day_ratio_single_tile_users'])
 
-    dsd_to_region_to_info = _expand_regions(ds_to_dsd_to_info)
+    ds_to_region_to_info = _expand_regions(ds_to_dsd_to_info)
 
     data_file_name = '/tmp/mobility.lk-data-%s.json' % ('latest')
-    jsonx.write(data_file_name, dsd_to_region_to_info)
+    jsonx.write(data_file_name, ds_to_region_to_info)
     log.info('Expanded LK data to %s', (data_file_name))
+
+    return ds_to_region_to_info

@@ -8,7 +8,7 @@ log = logging.getLogger('mobility')
 
 
 def _download_zip(download_url, zip_file):
-    os.system('wget %s -O %s ' % (download_url, zip_file))
+    # os.system('wget %s -O %s ' % (download_url, zip_file))
     log.info(
         'Downloaded zip from %s to %s',
         download_url,
