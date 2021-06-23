@@ -11,10 +11,9 @@ from utils.cache import cache
 
 from gig import ents
 
-from mobility._constants import CACHE_NAME, CACHE_TIMEOUT
+from mobility._constants import CACHE_NAME, CACHE_TIMEOUT, URL_HDX_MOBILITY
 from mobility._utils import log
 
-URL_HDX_MOBILITY = 'https://data.humdata.org/dataset/movement-range-maps?'
 REGEX_FILE = r'movement-range-data-(?P<date_str>\d{4}-\d{2}-\d{2}).zip'
 MISSING_DSD_NAME_TO_DSD_ID = {
         'K.F.G. & G. Korale': 'LK-2130',
