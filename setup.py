@@ -46,7 +46,7 @@ setuptools.setup(
         'geo-nuuuwan',
         'imageio',
         'matplotlib',
-        'mapclassify==2.4.0',
         'geopandas',
+        'mapclassify==2.4.0',
     ],
 )

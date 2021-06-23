@@ -7,3 +7,4 @@ geo-nuuuwan
 imageio
 geopandas
 matplotlib
+mapclassify==2.4.0
