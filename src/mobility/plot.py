@@ -45,11 +45,11 @@ def _plot(region_id, child_region_type, label, _ds):
         norm=Normalize(0, 6),
         cmap=ListedColormap([
             'lightgray',
-            'darkgreen',
             'green',
             'orange',
             'red',
             'brown',
+            'black',
         ]),
         figsize=(8, 9),
     )
