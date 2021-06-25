@@ -49,10 +49,11 @@ def _tweet():
     rendered_details = '\n'.join(rendered_detail_lines)
 
     tweet_text = '''Mobility Report ({_ds})
-% of Sri Lankans "Staying Put" by @Facebook Mobility
+% of Sri Lankans "Staying Put"
 
 {rendered_details}
 
+Method: @Facebook Mobility
 #lka #SriLanka #COVID19SL #LockDown @HumanData
     '''.format(
         _ds=latest_ds,
