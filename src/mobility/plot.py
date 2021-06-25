@@ -73,9 +73,9 @@ def _plot_all():
     return {
         'ds': latest_ds,
         'image_files': [
-            _plot('LK', 'district', 'Sri Lanka', latest_ds),
+            _plot('LK', 'dsd', 'Sri Lanka', latest_ds),
             _plot('LK-1', 'dsd', 'the Western Province', latest_ds),
-            _plot('LK', 'district', 'Sri Lanka', week_ago_ds),
+            _plot('LK', 'dsd', 'Sri Lanka', week_ago_ds),
             _plot('LK-1', 'dsd', 'the Western Province', week_ago_ds),
         ]
     }
