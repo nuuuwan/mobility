@@ -1,22 +1,68 @@
+
 """Tweet."""
 
 from utils import twitter
 
+from mobility import lk_data
 from mobility.plot import _plot_all
+
+from gig import ents
 
 
 def _tweet():
-    plot_info = _plot_all()
+    latest_ds = lk_data.get_latest_ds()
+    all_data = lk_data.get_data()
+    latest_data = all_data[latest_ds].items()
+    latest_data_dsd = list(filter(
+        lambda x: len(x[0]) == 7,
+        latest_data,
+    ))
+    latest_data_dsd = sorted(latest_data_dsd, key=lambda x: x[1])
+    dsd_index = ents.get_entity_index('dsd')
 
-    tweet_text = '''
-Mobility Report {_ds}
+    rendered_detail_lines = ['🔴 HIGHEST']
+    for i in range(0, 3):
+        info = latest_data_dsd[-(i + 1)]
+        dsd = dsd_index[info[0]]
+        name = dsd['name']
+        if len(name) > 15:
+            name = name[:12] + '...'
+        rendered_detail_lines.append(
+            '{dsd_id} {p_non_mobile:.1%}'.format(
+                dsd_id=name,
+                p_non_mobile=info[1],
+            )
+        )
+    rendered_detail_lines += ['', '🟢 LOWEST']
+    for i in range(0, 3):
+        info = latest_data_dsd[i]
+        dsd = dsd_index[info[0]]
+        name = dsd['name']
+        if len(name) > 15:
+            name = name[:12] + '...'
+        rendered_detail_lines.append(
+            '{dsd_id} {p_non_mobile:.1%}'.format(
+                dsd_id=name,
+                p_non_mobile=info[1],
+            )
+        )
+    rendered_details = '\n'.join(rendered_detail_lines)
 
-% of Sri Lankans "Staying Put", according to @Facebook's mobility data.
+    tweet_text = '''Mobility Report ({_ds})
+% of Sri Lankans "Staying Put" by @Facebook Mobility
+
+{rendered_details}
 
 #lka #SriLanka #COVID19SL #LockDown @HumanData
     '''.format(
-        _ds=plot_info['ds'],
+        _ds=latest_ds,
+        rendered_details=rendered_details,
     )
+
+    print(tweet_text)
+    print(len(tweet_text))
+
+    plot_info = _plot_all()
 
     status_image_files = plot_info['image_files']
 
