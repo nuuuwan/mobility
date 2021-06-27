@@ -25,10 +25,9 @@ def _tweet():
         info = latest_data_dsd[-(i + 1)]
         dsd = dsd_index[info[0]]
         name = dsd['name']
-        if len(name) > 15:
-            name = name[:13] + '...'
-        else:
-            name = '#' + name
+        if len(name) > 10:
+            name = name.split(' ')[:10]
+        name = '#' + name
         rendered_detail_lines.append(
             '{dsd_id} {p_non_mobile:.1%}'.format(
                 dsd_id=name,
@@ -40,10 +39,9 @@ def _tweet():
         info = latest_data_dsd[i]
         dsd = dsd_index[info[0]]
         name = dsd['name']
-        if len(name) > 15:
-            name = name[:13] + '...'
-        else:
-            name = '#' + name
+        if len(name) > 10:
+            name = name.split(' ')[:10]
+        name = '#' + name
         rendered_detail_lines.append(
             '{dsd_id} {p_non_mobile:.1%}'.format(
                 dsd_id=name,
