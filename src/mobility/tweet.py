@@ -26,7 +26,7 @@ def _tweet():
         dsd = dsd_index[info[0]]
         name = dsd['name']
         if len(name) > 10:
-            name = name.split(' ')[:10]
+            name = name.split(' ')[0][:10]
         name = '#' + name
         rendered_detail_lines.append(
             '{dsd_id} {p_non_mobile:.1%}'.format(
@@ -40,7 +40,7 @@ def _tweet():
         dsd = dsd_index[info[0]]
         name = dsd['name']
         if len(name) > 10:
-            name = name.split(' ')[:10]
+            name = name.split(' ')[0][:10]
         name = '#' + name
         rendered_detail_lines.append(
             '{dsd_id} {p_non_mobile:.1%}'.format(
