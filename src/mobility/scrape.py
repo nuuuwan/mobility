@@ -5,14 +5,10 @@ import re
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-
 from utils.cache import cache
 
-from mobility._constants import \
-    CACHE_NAME, CACHE_TIMEOUT, \
-    URL_HDX_MOBILITY
-
-from mobility._utils import log, _download_zip, _unzip
+from mobility._constants import CACHE_NAME, CACHE_TIMEOUT, URL_HDX_MOBILITY
+from mobility._utils import _download_zip, _unzip, log
 
 REGEX_FILE = r'movement-range-data-(?P<date_str>\d{4}-\d{2}-\d{2}).zip'
 DIR_TMP = '/tmp/tmp.mobility'
@@ -55,14 +51,20 @@ def _get_date_str(download_url):
 def _extract_lk_text(date_str):
     text_file = '%s/movement-range-%s.txt' % (DIR_TMP, date_str)
     lk_text_file = '%s/lk-data-%s.txt' % (DIR_TMP, date_str)
-    os.system('head -n 1 %s > %s' % (
-        text_file,
-        lk_text_file,
-    ))
-    os.system('grep LKA %s >> %s' % (
-        text_file,
-        lk_text_file,
-    ))
+    os.system(
+        'head -n 1 %s > %s'
+        % (
+            text_file,
+            lk_text_file,
+        )
+    )
+    os.system(
+        'grep LKA %s >> %s'
+        % (
+            text_file,
+            lk_text_file,
+        )
+    )
     log.info('Extracted LK data from %s to %s', text_file, lk_text_file)
     return lk_text_file
 

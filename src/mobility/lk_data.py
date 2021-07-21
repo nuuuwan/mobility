@@ -6,7 +6,6 @@ from utils.cache import cache
 
 from mobility._constants import CACHE_NAME, CACHE_TIMEOUT
 
-
 URL_LK_DATA = os.path.join(
     'https://raw.githubusercontent.com/nuuuwan/mobility/data/',
     'mobility.lk-data-latest.json',

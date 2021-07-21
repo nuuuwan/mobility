@@ -1,7 +1,7 @@
 """Utils."""
 
-import os
 import logging
+import os
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger('mobility')

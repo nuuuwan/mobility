@@ -1,6 +1,7 @@
 """Render summary."""
 
 from utils import filex
+
 from mobility._utils import log
 
 

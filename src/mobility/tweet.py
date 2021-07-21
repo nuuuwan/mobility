@@ -1,22 +1,22 @@
-
 """Tweet."""
 
+from gig import ents
 from utils import twitter
 
 from mobility import lk_data
 from mobility.plot import _plot_all
-
-from gig import ents
 
 
 def _tweet():
     latest_ds = lk_data.get_latest_ds()
     all_data = lk_data.get_data()
     latest_data = all_data[latest_ds].items()
-    latest_data_dsd = list(filter(
-        lambda x: len(x[0]) == 7,
-        latest_data,
-    ))
+    latest_data_dsd = list(
+        filter(
+            lambda x: len(x[0]) == 7,
+            latest_data,
+        )
+    )
     latest_data_dsd = sorted(latest_data_dsd, key=lambda x: x[1])
     dsd_index = ents.get_entity_index('dsd')
 

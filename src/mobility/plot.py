@@ -1,9 +1,8 @@
 """Plot."""
-import os
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap, Normalize
 
+import matplotlib.pyplot as plt
 from geo import geodata
+from matplotlib.colors import ListedColormap, Normalize
 
 from mobility import lk_data
 from mobility._constants import URL_HDX_MOBILITY
@@ -24,12 +23,10 @@ def _plot(region_id, child_region_type, label, _ds):
 
     _df.plot(
         column='p_non_mobile',
-
         scheme='UserDefined',
         classification_kwds={
             'bins': [0, 0.2, 0.4, 0.6, 0.8, 1.0],
         },
-
         legend=True,
         legend_kwds={
             'labels': [
@@ -41,16 +38,17 @@ def _plot(region_id, child_region_type, label, _ds):
                 '%80 <',
             ],
         },
-
         norm=Normalize(0, 6),
-        cmap=ListedColormap([
-            'lightgray',
-            'green',
-            'orange',
-            'red',
-            'brown',
-            'black',
-        ]),
+        cmap=ListedColormap(
+            [
+                'lightgray',
+                'green',
+                'orange',
+                'red',
+                'brown',
+                'black',
+            ]
+        ),
         figsize=(8, 9),
     )
     image_file = '/tmp/tmp.mobility.%s.%s.%s.png' % (
@@ -77,7 +75,7 @@ def _plot_all():
             _plot('LK-1', 'dsd', 'the Western Province', latest_ds),
             _plot('LK', 'dsd', 'Sri Lanka', week_ago_ds),
             _plot('LK-1', 'dsd', 'the Western Province', week_ago_ds),
-        ]
+        ],
     }
 
 

@@ -1,57 +1,64 @@
 """Animated GIF."""
-import os
 import datetime
+import os
 
+import imageio
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
 import numpy as np
-
-import imageio
-
-from utils import timex
 from covid19 import lk_data as covid_lk_data
 from covid19.covid_data import JHU_URL
+from utils import timex
 
 from mobility import lk_data
+from mobility._constants import LK_COVID_EVENTS, URL_HDX_MOBILITY
 from mobility._utils import log
-
-from mobility._constants import URL_HDX_MOBILITY, LK_COVID_EVENTS
 
 WINDOW_DAYS = 7
 
 
 def _build_frame(data_all, max_ds):
-    data_all_filtered = list(filter(
-        lambda item: item['ds'] <= max_ds,
-        data_all,
-    ))
+    data_all_filtered = list(
+        filter(
+            lambda item: item['ds'] <= max_ds,
+            data_all,
+        )
+    )
 
-    _x = list(map(
-        lambda item: datetime.datetime.fromtimestamp(
-            timex.parse_time(item['ds'], '%Y-%m-%d'),
-        ),
-        data_all_filtered,
-    ))
-    _x = _x[:-(WINDOW_DAYS - 1)]
-    _y1 = list(map(
-        lambda item: item['new_deaths'],
-        data_all_filtered,
-    ))
+    _x = list(
+        map(
+            lambda item: datetime.datetime.fromtimestamp(
+                timex.parse_time(item['ds'], '%Y-%m-%d'),
+            ),
+            data_all_filtered,
+        )
+    )
+    _x = _x[: -(WINDOW_DAYS - 1)]
+    _y1 = list(
+        map(
+            lambda item: item['new_deaths'],
+            data_all_filtered,
+        )
+    )
     _y1_window = np.convolve(
-        _y1, np.ones(WINDOW_DAYS) / WINDOW_DAYS,
+        _y1,
+        np.ones(WINDOW_DAYS) / WINDOW_DAYS,
         'valid',
     )
-    _y1 = _y1[:-(WINDOW_DAYS - 1)]
+    _y1 = _y1[: -(WINDOW_DAYS - 1)]
 
-    _y2 = list(map(
-        lambda item: item['p_non_mobile_lk'],
-        data_all_filtered,
-    ))
+    _y2 = list(
+        map(
+            lambda item: item['p_non_mobile_lk'],
+            data_all_filtered,
+        )
+    )
     _y2_window = np.convolve(
-        _y2, np.ones(WINDOW_DAYS) / WINDOW_DAYS,
+        _y2,
+        np.ones(WINDOW_DAYS) / WINDOW_DAYS,
         'valid',
     )
-    _y2 = _y2[:-(WINDOW_DAYS - 1)]
+    _y2 = _y2[: -(WINDOW_DAYS - 1)]
 
     fig, axs = plt.subplots(2)
     width = 12
@@ -63,19 +70,23 @@ def _build_frame(data_all, max_ds):
     axs[1].plot(_x, _y2, color='lightblue')
 
     axs[0].set_title('Daily COVID19 Deaths in Sri Lanka')
-    axs[0].legend([
-        '%d-day Moving Avg.' % WINDOW_DAYS,
-        'Point Value',
-    ])
+    axs[0].legend(
+        [
+            '%d-day Moving Avg.' % WINDOW_DAYS,
+            'Point Value',
+        ]
+    )
     axs[0].get_yaxis().set_major_formatter(
         tkr.FuncFormatter(lambda x, p: format(int(x), ','))
     )
 
     axs[1].set_title('% of the Sri Lankan population "staying put"')
-    axs[1].legend([
-        '%d-day Moving Avg.' % WINDOW_DAYS,
-        'Point Value',
-    ])
+    axs[1].legend(
+        [
+            '%d-day Moving Avg.' % WINDOW_DAYS,
+            'Point Value',
+        ]
+    )
     axs[1].get_yaxis().set_major_formatter(
         tkr.FuncFormatter(lambda x, p: format(float(x), '.1%'))
     )
@@ -102,8 +113,10 @@ def _build_frame(data_all, max_ds):
 
     fig.suptitle(max_ds)
     fig.text(
-        0.5, 0.05,
-        'Data Sources: %s & %s' % (
+        0.5,
+        0.05,
+        'Data Sources: %s & %s'
+        % (
             URL_HDX_MOBILITY,
             JHU_URL,
         ),
@@ -112,9 +125,7 @@ def _build_frame(data_all, max_ds):
 
     fig.autofmt_xdate()
 
-    img_file = '/tmp/mobility.%s.png' % (
-        max_ds,
-    )
+    img_file = '/tmp/mobility.%s.png' % (max_ds,)
     fig.savefig(img_file, dpi=120)
     log.info('Saved plot to %s', img_file)
     return img_file
@@ -135,10 +146,12 @@ def _build_animated_gif():
         }
         if _ds in LK_COVID_EVENTS:
             _dict['event'] = LK_COVID_EVENTS[_ds]
-        data_all.append({
-            **_dict,
-            **item_covid19,
-        })
+        data_all.append(
+            {
+                **_dict,
+                **item_covid19,
+            }
+        )
 
     img_files = []
     n_items = len(data_all[WINDOW_DAYS:])
@@ -159,7 +172,7 @@ def _build_animated_gif():
         images.append(images[-1])
 
     animated_gif_file = '/tmp/mobility.gif'
-    imageio.mimsave(animated_gif_file, images, duration=60/len(images))
+    imageio.mimsave(animated_gif_file, images, duration=60 / len(images))
     log.info('Saved animated gif to %s', animated_gif_file)
     os.system('open -a firefox %s' % animated_gif_file)
 

@@ -1,7 +1,7 @@
 """Extract."""
 
-from utils import tsv, jsonx
 from gig import ents
+from utils import jsonx, tsv
 
 from mobility._constants import MISSING_DSD_NAME_TO_DSD_ID
 from mobility._utils import log
@@ -101,8 +101,9 @@ def _extract_data(lk_text_file):
         if _ds not in ds_to_dsd_to_info:
             ds_to_dsd_to_info[_ds] = {}
 
-        ds_to_dsd_to_info[_ds][dsd_id] = \
-            (float)(data['all_day_ratio_single_tile_users'])
+        ds_to_dsd_to_info[_ds][dsd_id] = (float)(
+            data['all_day_ratio_single_tile_users']
+        )
 
     ds_to_region_to_info = _expand_regions(ds_to_dsd_to_info)
 

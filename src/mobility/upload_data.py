@@ -1,7 +1,6 @@
 """Uploaded data  to data branch."""
 
-from mobility import scrape, extract, summary
-
+from mobility import extract, scrape, summary
 
 if __name__ == '__main__':
     lk_text_file = scrape.scrape()
