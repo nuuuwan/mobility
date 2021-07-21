@@ -17,8 +17,11 @@ def _download_zip(download_url, zip_file):
 
 
 def _unzip(zip_file, unzip_dir):
-    os.system('unzip -d %s -o %s' % (
-        unzip_dir,
-        zip_file,
-    ))
+    os.system(
+        'unzip -d %s -o %s'
+        % (
+            unzip_dir,
+            zip_file,
+        )
+    )
     log.info('Unzipped %s to %s', zip_file, unzip_dir)
