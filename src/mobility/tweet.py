@@ -24,13 +24,10 @@ def _tweet():
     for i in range(0, 3):
         info = latest_data_dsd[-(i + 1)]
         dsd = dsd_index[info[0]]
-        name = dsd['name']
-        if len(name) > 15:
-            name = name.split(' ')[0][:15]
-        name = '#' + name
+        display_name = '#' + dsd['name'].replace(' ', '')
         rendered_detail_lines.append(
-            '{dsd_id} {p_non_mobile:.1%}'.format(
-                dsd_id=name,
+            '{display_name} {p_non_mobile:.1%}'.format(
+                display_name=display_name,
                 p_non_mobile=info[1],
             )
         )
@@ -38,13 +35,11 @@ def _tweet():
     for i in range(0, 3):
         info = latest_data_dsd[i]
         dsd = dsd_index[info[0]]
-        name = dsd['name']
-        if len(name) > 15:
-            name = name.split(' ')[0][:15]
-        name = '#' + name
+
+        display_name = '#' + dsd['name'].replace(' ', '')
         rendered_detail_lines.append(
-            '{dsd_id} {p_non_mobile:.1%}'.format(
-                dsd_id=name,
+            '{display_name} {p_non_mobile:.1%}'.format(
+                display_name=display_name,
                 p_non_mobile=info[1],
             )
         )
@@ -55,15 +50,11 @@ def _tweet():
 
 {rendered_details}
 
-Method: @Facebook Mobility
-#lka #COVID19SL @HumanData
+@HumanData @Facebook #lka #COVID19SL
     '''.format(
         _ds=latest_ds,
         rendered_details=rendered_details,
     )
-
-    print(tweet_text)
-    print(len(tweet_text))
 
     plot_info = _plot_all()
 
