@@ -1,11 +1,9 @@
-
 import datetime
 
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tkr
+import numpy as np
 from infographics import Figure, Infographic
-
 from utils import timex
 
 from mobility import lk_data
@@ -14,12 +12,13 @@ POPULATION = 21_800_000
 PADDING = 0.12
 DS_FORMAT = '%Y-%m-%d'
 DAYS_MOVING_WINDOW = 7
+URL_HDX = 'https://data.humdata.org/dataset/movement-range-maps'
 
-REGION_IDS = ['LK', 'LK-1', 'LK-11', 'LK-1103']
 
 class PlotByRegion(Figure.Figure):
     def __init__(
         self,
+        region_to_labels,
         left_bottom=(PADDING, PADDING),
         width_height=(1 - PADDING * 2, 1 - PADDING * 2),
         figure_text='',
@@ -29,26 +28,37 @@ class PlotByRegion(Figure.Figure):
             width_height=width_height,
             figure_text=figure_text,
         )
+        self.region_to_labels = region_to_labels
         self.__data__ = PlotByRegion.__prep_data__(self)
 
     def __prep_data__(self):
         data_by_region = lk_data.get_data_by_region()
+        region_ids = list(self.region_to_labels.keys())
+        dss = list(data_by_region[region_ids[0]].keys())
+        x = list(
+            map(
+                lambda ds: datetime.datetime.fromtimestamp(
+                    timex.parse_time(ds, DS_FORMAT)
+                ),
+                dss[: -DAYS_MOVING_WINDOW + 1],
+            )
+        )
 
-        dss = list(data_by_region[REGION_IDS[0]].keys())
-        x = list(map(
-            lambda ds: datetime.datetime.fromtimestamp(timex.parse_time(ds, DS_FORMAT)),
-            dss[:-DAYS_MOVING_WINDOW + 1],
-        ))
-
-
-        ys = list(map(
-            lambda region_id: np.convolve(
-                list(data_by_region[region_id].values()),
-                np.ones(DAYS_MOVING_WINDOW) / DAYS_MOVING_WINDOW,
-                'valid',
-            ),
-            REGION_IDS,
-        ))
+        ys = list(
+            map(
+                lambda region_id: np.convolve(
+                    list(
+                        map(
+                            lambda ds: data_by_region[region_id].get(ds, 0),
+                            dss,
+                        )
+                    ),
+                    np.ones(DAYS_MOVING_WINDOW) / DAYS_MOVING_WINDOW,
+                    'valid',
+                ),
+                region_ids,
+            )
+        )
 
         date = dss[-1][:10]
         date_id = date.replace('-', '')
@@ -64,10 +74,13 @@ class PlotByRegion(Figure.Figure):
         for y in ys:
             plt.plot(x, y)
         plt.legend(
-            ['Sri Lanka', 'Western Province', 'Colombo District', 'Colombo DSD'],
+            self.region_to_labels.values(),
             loc='upper left',
         )
-        plt.ylabel('Proportion of Population "Staying Put"')
+        plt.ylabel(
+            'Proportion of Population "Staying Put" (%d Day Moving Average)'
+            % DAYS_MOVING_WINDOW
+        )
         ax.grid()
         ax.get_yaxis().set_major_formatter(
             tkr.FuncFormatter(lambda x, p: format(float(x), '.1%'))
@@ -79,16 +92,19 @@ class PlotByRegion(Figure.Figure):
         return self.__data__
 
 
-def _plot():
-    plot = PlotByRegion()
+def _plot(region_to_labels, subtitle, tag):
+    plot = PlotByRegion(region_to_labels=region_to_labels)
     (x, ys, date, date_id) = plot.get_data()
 
-    image_file = '/tmp/mobility.plot_by_region.%s.png' % (date_id)
+    image_file = '/tmp/mobility.plot_by_region.%s.%s.png' % (date_id, tag)
     Infographic.Infographic(
         title='Proportion of Population "Staying Put"',
-        subtitle='(as of %s)' % date,
+        subtitle='%s (as of %s)' % (subtitle, date),
         footer_text='\n'.join(
-            ['Data from https://data.humdata.org/dataset/movement-range-maps', 'Visualization by @nuuuwan']
+            [
+                'Data from %s' % URL_HDX,
+                'Visualization by @nuuuwan',
+            ]
         ),
         children=[plot],
     ).save(image_file)
@@ -96,4 +112,38 @@ def _plot():
 
 
 if __name__ == '__main__':
-    _plot()
+    _plot(
+        {
+            'LK': 'Sri Lanka',
+            'LK-1': 'Western Province',
+            'LK-2': 'Central Province',
+            'LK-3': 'Southern Province',
+            'LK-4': 'Northern Province',
+            # 'LK-5': 'Eastern Province',
+            'LK-6': 'North Western Province',
+            'LK-7': 'North Central Province',
+            # 'LK-8': 'Uva Province',
+            'LK-9': 'Sabaragamuwa Province',
+        },
+        'By Province - Uva and Eastern Provinces have incomplete data',
+        'provinces',
+    )
+
+    _plot(
+        {
+            'LK-1103': 'Colombo',
+            'LK-1106': 'Kolonnawa',
+            'LK-1109': 'Kaduwela',
+            'LK-1112': 'Homagama',
+            'LK-1115': 'Seethawaka',
+            'LK-1118': 'Padukka',
+            'LK-1121': 'Maharagama',
+            'LK-1124': 'Sri Jayawardanapura Kotte',
+            'LK-1127': 'Thimbirigasyaya',
+            'LK-1130': 'Dehiwala-Ratmalana',
+            'LK-1133': 'Moratuwa',
+            'LK-1136': 'Kesbewa',
+        },
+        'Colombo District',
+        'colombo',
+    )

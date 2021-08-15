@@ -3,7 +3,7 @@
 from gig import ents
 from utils import twitter
 
-from mobility import lk_data
+from mobility import PlotByRegion, lk_data
 from mobility.plot import _plot_all
 
 
@@ -58,7 +58,42 @@ def _tweet():
 
     plot_info = _plot_all()
 
-    status_image_files = plot_info['image_files']
+    status_image_files = plot_info['image_files'] + [
+        PlotByRegion._plot(
+            {
+                'LK': 'Sri Lanka',
+                'LK-1': 'Western Province',
+                'LK-2': 'Central Province',
+                'LK-3': 'Southern Province',
+                'LK-4': 'Northern Province',
+                # 'LK-5': 'Eastern Province',
+                'LK-6': 'North Western Province',
+                'LK-7': 'North Central Province',
+                # 'LK-8': 'Uva Province',
+                'LK-9': 'Sabaragamuwa Province',
+            },
+            'By Province - Uva and Eastern Provinces have incomplete data',
+            'provinces',
+        ),
+        PlotByRegion._plot(
+            {
+                'LK-1103': 'Colombo',
+                'LK-1106': 'Kolonnawa',
+                'LK-1109': 'Kaduwela',
+                'LK-1112': 'Homagama',
+                'LK-1115': 'Seethawaka',
+                'LK-1118': 'Padukka',
+                'LK-1121': 'Maharagama',
+                'LK-1124': 'Sri Jayawardanapura Kotte',
+                'LK-1127': 'Thimbirigasyaya',
+                'LK-1130': 'Dehiwala-Ratmalana',
+                'LK-1133': 'Moratuwa',
+                'LK-1136': 'Kesbewa',
+            },
+            'Colombo District',
+            'colombo',
+        ),
+    ]
 
     twtr = twitter.Twitter.from_args()
     twtr.tweet(

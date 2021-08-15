@@ -67,14 +67,12 @@ def _plot(region_id, child_region_type, label, _ds):
 def _plot_all():
     ds_list = lk_data.get_ds_list()
     latest_ds = ds_list[-1]
-    week_ago_ds = ds_list[-1 - 7]
+    ds_list[-1 - 7]
     return {
         'ds': latest_ds,
         'image_files': [
             _plot('LK', 'dsd', 'Sri Lanka', latest_ds),
             _plot('LK-1', 'dsd', 'the Western Province', latest_ds),
-            _plot('LK', 'dsd', 'Sri Lanka', week_ago_ds),
-            _plot('LK-1', 'dsd', 'the Western Province', week_ago_ds),
         ],
     }
 
