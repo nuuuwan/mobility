@@ -30,3 +30,4 @@ pip install -i https://test.pypi.org/simple/ mobility-nuuuwan
 * [2021-07-21 01:52PM] auto git lint
 * [2021-08-15 02:14PM] Plot By Region
   * Updated README
+  * Plot complete

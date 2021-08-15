@@ -1,10 +1,12 @@
+# Auto Generated
 bs4
+geo-nuuuwan
+geopandas
+gig-nuuuwan
+imageio
+mapclassify==2.4.0
+matplotlib
+numpy
 selenium
 tweepy
 utils-nuuuwan
-gig-nuuuwan
-geo-nuuuwan
-imageio
-geopandas
-matplotlib
-mapclassify==2.4.0
