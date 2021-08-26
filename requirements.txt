@@ -4,6 +4,7 @@ geo-nuuuwan
 geopandas
 gig-nuuuwan
 imageio
+infographics-nuuuwan
 mapclassify==2.4.0
 matplotlib
 numpy

@@ -33,3 +33,4 @@ pip install -i https://test.pypi.org/simple/ mobility-nuuuwan
   * Plot complete
   * Pre-Merge
   * Added infographics-nuuuwan
+  * Added infographics-nuuuwan
