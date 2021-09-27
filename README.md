@@ -34,3 +34,4 @@ pip install -i https://test.pypi.org/simple/ mobility-nuuuwan
   * Pre-Merge
   * Added infographics-nuuuwan
   * Added infographics-nuuuwan
+  *  [2021-09-27 02:09PM] Updated tweepy==3.10.0

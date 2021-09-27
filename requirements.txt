@@ -9,5 +9,5 @@ mapclassify==2.4.0
 matplotlib
 numpy
 selenium
-tweepy
+tweepy==3.10.0
 utils-nuuuwan
