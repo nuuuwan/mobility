@@ -35,3 +35,4 @@ pip install -i https://test.pypi.org/simple/ mobility-nuuuwan
   * Added infographics-nuuuwan
   * Added infographics-nuuuwan
   *  [2021-09-27 02:09PM] Updated tweepy==3.10.0
+  *  [2021-11-15 02:57PM] Deleted Crons
