@@ -1,5 +1,5 @@
 
-name: Tweet
+name: Tweet CRON
 
 on:
  schedule:

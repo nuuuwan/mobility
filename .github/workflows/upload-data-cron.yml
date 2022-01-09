@@ -1,4 +1,4 @@
-name: Upload Data
+name: Upload Data CRON
 
 on:
  schedule:
