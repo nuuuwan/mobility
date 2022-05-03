@@ -32,7 +32,7 @@ setuptools.setup(
         'geopandas',
         'gig-nuuuwan',
         'imageio',
-        'infographics-nuuuwan',
+        'infographics-nuuuwan==1.0.8',
         'mapclassify==2.4.0',
         'matplotlib',
         'numpy',
