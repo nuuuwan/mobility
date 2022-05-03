@@ -4,7 +4,11 @@ geo-nuuuwan
 geopandas
 gig-nuuuwan
 imageio
+<<<<<<< HEAD
 infographics-nuuuwan==1.0.8
+=======
+infographics-nuuuwan=1.0.8
+>>>>>>> 9393f2ed0678da1fe6097f9a2cd0d4f3d0f4b1cf
 mapclassify==2.4.0
 matplotlib
 numpy
