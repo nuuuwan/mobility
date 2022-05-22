@@ -1,6 +1,6 @@
 # Facebook Movement Range Maps
 
-This GitHub Repository contains data for 504 days from 2021-01-01 to 2022-05-19.
+This GitHub Repository contains data for 505 days from 2021-01-01 to 2022-05-20.
 
 ## Appendix: Original Data Source
 
